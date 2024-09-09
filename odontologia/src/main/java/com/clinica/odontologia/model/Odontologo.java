@@ -28,8 +28,6 @@ public class Odontologo {
     @OneToMany(mappedBy = "odontologo")
     private List<Turno> turnos;
 
-    // Getters, setters y constructores
-
     public Odontologo(String matricula, String apellido, String nombre, Long id, List<Turno> turnos) {
         this.matricula = matricula;
         this.apellido = apellido;

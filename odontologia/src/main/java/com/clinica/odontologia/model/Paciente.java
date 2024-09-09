@@ -1,8 +1,13 @@
 package com.clinica.odontologia.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 
+@Setter
+@Getter
 @Entity
 public class Paciente {
     @Id
@@ -17,18 +22,12 @@ public class Paciente {
     private Domicilio domicilio;
 
     @OneToOne(mappedBy = "paciente")
+    @JsonIgnore
     private Turno turno;
 
     public Paciente() {
 
     }
-
-    public void setId(Long id) {
-
-    }
-
-    // Getters, setters y constructores
-
 
     public Paciente(Long id, String nombre, String apellido, String dni, Domicilio domicilio, Turno turno) {
         this.id = id;
@@ -39,47 +38,4 @@ public class Paciente {
         this.turno = turno;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Turno getTurno() {
-        return turno;
-    }
-
-    public void setTurno(Turno turno) {
-        this.turno = turno;
-    }
-
-    public Domicilio getDomicilio() {
-        return domicilio;
-    }
-
-    public void setDomicilio(Domicilio domicilio) {
-        this.domicilio = domicilio;
-    }
-
-    public String getDni() {
-        return dni;
-    }
-
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
 }

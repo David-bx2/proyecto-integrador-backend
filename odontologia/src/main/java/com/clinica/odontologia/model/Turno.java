@@ -19,9 +19,6 @@ public class Turno {
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;
 
-    // Getters, setters y constructores
-
-
     public Turno(Long id, LocalDateTime fecha, Odontologo odontologo, Paciente paciente) {
         this.id = id;
         this.fecha = fecha;

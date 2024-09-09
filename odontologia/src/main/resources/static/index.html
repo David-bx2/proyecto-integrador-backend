@@ -10,7 +10,7 @@
 <div class="container">
     <h1 class="mt-5">Gestión de Odontólogos</h1>
 
-    <!-- Formulario para agregar/actualizar odontólogos -->
+
     <form id="odontologoForm" class="mt-3">
         <div class="form-group">
             <label for="nombre">Nombre</label>
@@ -28,7 +28,7 @@
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 
-    <!-- Tabla para listar odontólogos -->
+
     <h2 class="mt-5">Lista de Odontólogos</h2>
     <table class="table mt-3">
         <thead>
@@ -41,17 +41,72 @@
         </tr>
         </thead>
         <tbody id="odontologoTableBody">
-        <!-- Los odontólogos se llenarán aquí -->
         </tbody>
     </table>
+
+
+
+<h2 class="mt-5">Agregar Paciente</h2>
+<form id="pacienteForm" class="mt-3">
+    <div class="form-group">
+        <label for="nombrePaciente">Nombre</label>
+        <input type="text" class="form-control" id="nombrePaciente" required>
+    </div>
+    <div class="form-group">
+        <label for="apellidoPaciente">Apellido</label>
+        <input type="text" class="form-control" id="apellidoPaciente" required>
+    </div>
+    <div class="form-group">
+        <label for="dniPaciente">DNI</label>
+        <input type="text" class="form-control" id="dniPaciente" required>
+    </div>
+    <div class="form-group">
+        <label for="domicilioCalle">Calle</label>
+        <input type="text" class="form-control" id="domicilioCalle" required>
+    </div>
+    <div class="form-group">
+        <label for="domicilioNumero">Número</label>
+        <input type="text" class="form-control" id="domicilioNumero" required>
+    </div>
+    <div class="form-group">
+        <label for="domicilioCiudad">Ciudad</label>
+        <input type="text" class="form-control" id="domicilioCiudad" required>
+    </div>
+    <div class="form-group">
+        <label for="domicilioProvincia">Provincia</label>
+        <input type="text" class="form-control" id="domicilioProvincia" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Agregar Paciente</button>
+</form>
+
+
+<h2 class="mt-5">Agendar Turno</h2>
+<form id="turnoForm" class="mt-3">
+    <div class="form-group">
+        <label for="fechaTurno">Fecha</label>
+        <input type="datetime-local" class="form-control" id="fechaTurno" required>
+    </div>
+    <div class="form-group">
+        <label for="odontologoSelect">Odontólogo</label>
+        <select class="form-control" id="odontologoSelect" required></select>
+    </div>
+    <div class="form-group">
+        <label for="pacienteSelect">Paciente</label>
+        <select class="form-control" id="pacienteSelect" required></select>
+    </div>
+    <button type="submit" class="btn btn-primary">Agendar Turno</button>
+</form>
 </div>
+
+
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const odontologoForm = document.getElementById('odontologoForm');
         const odontologoTableBody = document.getElementById('odontologoTableBody');
 
-        // Fetch para cargar odontólogos existentes
+
         function loadOdontologos() {
             fetch('http://localhost:8082/odontologos')
                 .then(response => response.json())
@@ -74,7 +129,7 @@
                 });
         }
 
-        // Crear o actualizar un odontólogo
+
         odontologoForm.addEventListener('submit', function (e) {
             e.preventDefault();
 
@@ -100,11 +155,10 @@
             })
                 .then(() => {
                     odontologoForm.reset();
-                    loadOdontologos();  // Recargar la lista de odontólogos
+                    loadOdontologos();
                 });
         });
 
-        // Editar un odontólogo
         window.editarOdontologo = function (id) {
             fetch(`http://localhost:8082/odontologos/${id}`)
                 .then(response => response.json())
@@ -116,15 +170,106 @@
                 });
         };
 
-        // Eliminar un odontólogo
+
         window.eliminarOdontologo = function (id) {
             fetch(`http://localhost:8082/odontologos/${id}`, { method: 'DELETE' })
                 .then(() => loadOdontologos());
         };
 
-        // Cargar los odontólogos al inicio
+
         loadOdontologos();
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const pacienteForm = document.getElementById('pacienteForm');
+        const turnoForm = document.getElementById('turnoForm');
+        const odontologoSelect = document.getElementById('odontologoSelect');
+        const pacienteSelect = document.getElementById('pacienteSelect');
+
+
+        function loadOdontologos() {
+            fetch('http://localhost:8082/odontologos')
+                .then(response => response.json())
+                .then(data => {
+                    odontologoSelect.innerHTML = '';  // Limpiar el select antes de llenarlo
+                    data.forEach(odontologo => {
+                        odontologoSelect.innerHTML += `<option value="${odontologo.id}">${odontologo.nombre} ${odontologo.apellido}</option>`;
+                    });
+                })
+                .catch(error => console.error('Error al cargar los odontólogos:', error));
+        }
+
+
+        function loadPacientes() {
+            fetch('http://localhost:8082/pacientes')
+                .then(response => response.json())
+                .then(data => {
+                    pacienteSelect.innerHTML = '';
+                    data.forEach(paciente => {
+                        pacienteSelect.innerHTML += `<option value="${paciente.id}">${paciente.nombre} ${paciente.apellido}</option>`;
+                    });
+                });
+        }
+
+
+        pacienteForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const nombre = document.getElementById('nombrePaciente').value;
+            const apellido = document.getElementById('apellidoPaciente').value;
+            const dni = document.getElementById('dniPaciente').value;
+            const calle = document.getElementById('domicilioCalle').value;
+            const numero = document.getElementById('domicilioNumero').value;
+            const ciudad = document.getElementById('domicilioCiudad').value;
+            const provincia = document.getElementById('domicilioProvincia').value;
+
+            const paciente = {
+                nombre,
+                apellido,
+                dni,
+                domicilio: { calle, numero, ciudad, provincia }
+            };
+
+            fetch('http://localhost:8082/pacientes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(paciente)
+            })
+                .then(() => {
+                    pacienteForm.reset();
+                    loadPacientes();
+                });
+        });
+
+
+        turnoForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const fecha = document.getElementById('fechaTurno').value;
+            const odontologoId = odontologoSelect.value;
+            const pacienteId = pacienteSelect.value;
+
+            const turno = {
+                fecha,
+                odontologo: { id: odontologoId },
+                paciente: { id: pacienteId }
+            };
+
+            fetch('http://localhost:8082/turnos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(turno)
+            })
+                .then(() => {
+                    turnoForm.reset();
+                });
+        });
+
+
+        loadOdontologos();
+        loadPacientes();
+    });
+
 </script>
 </body>
 </html>

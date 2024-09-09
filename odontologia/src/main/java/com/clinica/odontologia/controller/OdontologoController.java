@@ -21,21 +21,18 @@ public class OdontologoController {
     @Autowired
     private OdontologoService odontologoService;
 
-    // Crear un nuevo odontólogo
     @PostMapping
     public ResponseEntity<Odontologo> crearOdontologo(@RequestBody Odontologo odontologo) {
         Odontologo nuevoOdontologo = odontologoService.guardarOdontologo(odontologo);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoOdontologo);
     }
 
-    // Obtener todos los odontólogos
     @GetMapping
     public ResponseEntity<List<Odontologo>> listarOdontologos() {
         List<Odontologo> odontologos = odontologoService.listarTodos();
         return ResponseEntity.ok(odontologos);
     }
 
-    // Obtener un odontólogo por ID
     @GetMapping("/{id}")
     public ResponseEntity<Odontologo> obtenerOdontologoPorId(@PathVariable Long id) {
         Optional<Odontologo> odontologo = odontologoService.buscarPorId(id);
@@ -43,7 +40,6 @@ public class OdontologoController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    // Actualizar un odontólogo
     @PutMapping("/{id}")
     public ResponseEntity<Odontologo> actualizarOdontologo(@PathVariable Long id, @RequestBody Odontologo odontologo) {
         logger.info("Solicitud para actualizar odontólogo con ID: " + id);
@@ -51,7 +47,7 @@ public class OdontologoController {
         Optional<Odontologo> odontologoExistente = odontologoService.buscarPorId(id);
         if (odontologoExistente.isPresent()) {
             logger.info("Odontólogo encontrado, actualizando datos.");
-            odontologo.setId(id);  // Establecer ID antes de guardar
+            odontologo.setId(id);
             logger.info("Asignando ID: " + id + " al odontólogo.");
             Odontologo odontologoActualizado = odontologoService.guardarOdontologo(odontologo);
             logger.info("Odontólogo actualizado: " + odontologoActualizado.toString());
@@ -62,7 +58,6 @@ public class OdontologoController {
         }
     }
 
-    // Eliminar un odontólogo
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarOdontologo(@PathVariable Long id) {
         Optional<Odontologo> odontologo = odontologoService.buscarPorId(id);

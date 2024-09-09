@@ -15,9 +15,6 @@ public class Domicilio {
     private String ciudad;
     private String provincia;
 
-    // Getters, setters y constructores
-
-
     public Domicilio(String provincia, String ciudad, String numero, String calle, Long id) {
         this.provincia = provincia;
         this.ciudad = ciudad;
